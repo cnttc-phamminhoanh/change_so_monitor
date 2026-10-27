@@ -21,7 +21,7 @@ const REQUIRED_COLUMNS = {
     'old_pac',
   ],
   stage: ['ord_no', 'ord_id', 'stage_date', 'stage'],
-  so_inf: ['ord_no', 'ord_id', 'style', 'po_no'],
+  so_inf: ['ord_no', 'ord_id', 'style', 'po_no', 'season', 'country', 'buyer'],
 };
 
 let poolPromise = null;
@@ -193,7 +193,7 @@ const fetchStageRowsFor = async (pool, ordNos) => {
 const fetchInfLines = async (pool) => {
   const result = await pool
     .request()
-    .query('SELECT ord_no, ord_id, style, po_no FROM so_inf');
+    .query('SELECT ord_no, ord_id, style, po_no, season, country, buyer FROM so_inf');
   return mapInfLines(result.recordset);
 };
 
@@ -203,13 +203,16 @@ const mapInfLines = (recordset) =>
     ordId: row.ord_id === null ? null : String(row.ord_id),
     style: row.style === null ? null : String(row.style),
     poNo: String(row.po_no),
+    season: row.season === null ? null : String(row.season),
+    country: row.country === null ? null : String(row.country),
+    buyer: row.buyer === null ? null : String(row.buyer),
   }));
 
 const fetchInfLinesFor = async (pool, ordNos) => {
   const request = pool.request();
   const list = addOrdNoParams(request, ordNos);
   const result = await request.query(
-    `SELECT ord_no, ord_id, style, po_no FROM so_inf WHERE ord_no IN (${list})`,
+    `SELECT ord_no, ord_id, style, po_no, season, country, buyer FROM so_inf WHERE ord_no IN (${list})`,
   );
   return mapInfLines(result.recordset);
 };

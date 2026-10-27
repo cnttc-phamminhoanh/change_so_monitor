@@ -37,6 +37,7 @@ export interface SoCopyBase {
   poDate: string;
   crdMeta: string;
   countryMeta: string;
+  seasonMeta: string;
   styleMeta: string;
   poNoMeta: string;
   ordNoLabel: string;
@@ -113,6 +114,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     poDate: 'PO 日期',
     crdMeta: 'CRD',
     countryMeta: '国家',
+    seasonMeta: '季节',
     styleMeta: '款式',
     poNoMeta: 'PO 号',
     ordNoLabel: '订单号',
@@ -168,6 +170,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     poDate: 'PO date',
     crdMeta: 'CRD',
     countryMeta: 'Country',
+    seasonMeta: 'Season',
     styleMeta: 'Style',
     poNoMeta: 'PO no',
     ordNoLabel: 'SO no',
@@ -223,6 +226,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     poDate: 'Ngày PO',
     crdMeta: 'CRD',
     countryMeta: 'Quốc gia',
+    seasonMeta: 'Season',
     styleMeta: 'Style',
     poNoMeta: 'Số PO',
     ordNoLabel: 'Số SO',

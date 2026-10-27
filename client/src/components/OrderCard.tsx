@@ -232,6 +232,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, index, activeField, copy }
             <span className="meta-k">{copy.countryMeta}</span>
             <span className="meta-v">{order.country ?? '—'}</span>
           </div>
+          <div className="meta">
+            <span className="meta-k">{copy.seasonMeta}</span>
+            <span className="meta-v">{order.season ?? '—'}</span>
+          </div>
         </div>
 
         <div className="so-side">

@@ -27,7 +27,10 @@ const buildHeaders = (changeRows, stageRows) => {
       ordId: null,
       poDate: poDateFromSoNo(ordNo),
       crd: null,
-      country: null,
+      changeCountry: null,
+      infCountry: null,
+      season: null,
+      buyer: null,
       styles: [],
       poNos: [],
       stage: 1,
@@ -41,9 +44,9 @@ const buildHeaders = (changeRows, stageRows) => {
     if (header.ordId === null && row.ordId) header.ordId = row.ordId;
     if (row.newDelDate) header.crd = row.newDelDate;
     if (row.newCountry) {
-      header.country = row.newCountry;
-    } else if (header.country === null && row.oldCountry) {
-      header.country = row.oldCountry;
+      header.changeCountry = row.newCountry;
+    } else if (header.changeCountry === null && row.oldCountry) {
+      header.changeCountry = row.oldCountry;
     }
   }
 
@@ -101,6 +104,9 @@ const loadOrders = async (pool, window) => {
       header.styles.push(line.style);
     }
     if (!header.poNos.includes(line.poNo)) header.poNos.push(line.poNo);
+    if (header.infCountry === null && line.country) header.infCountry = line.country;
+    if (header.season === null && line.season) header.season = line.season;
+    if (header.buyer === null && line.buyer) header.buyer = line.buyer;
   }
 
   const orders = [...headers.values()]
@@ -111,7 +117,9 @@ const loadOrders = async (pool, window) => {
       ordId: header.ordId,
       poDate: header.poDate,
       crd: header.crd,
-      country: header.country,
+      country: header.infCountry ?? header.changeCountry,
+      season: header.season,
+      buyer: header.buyer,
       styles: header.styles,
       poNos: header.poNos,
       stage: header.stage || 1,

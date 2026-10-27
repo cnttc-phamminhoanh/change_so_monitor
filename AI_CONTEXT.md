@@ -60,7 +60,7 @@ missing columns. Never weaken this check.
 | --- | --- | --- |
 | `change_so` | `ord_no`, `ord_id`, `change_dae` (change date), `new_qty`/`old_qty`, `new_country`/`old_country`, `new_pri`/`old_pri`, `new_crd`/`old_crd` (CRD), `new_pac`/`old_pac` | one row per raw change event; `change_dae` may be NULL (such rows are skipped by derivation); column names differ from the cloud (`change_date`, `new_del_date`/`old_del_date`) — the SELECT aliases map them |
 | `stage` | `ord_no`, `ord_id`, `stage_date`, `stage` (1..7) | production stage events |
-| `so_inf` | `ord_no`, `ord_id`, `style`, `po_no` | PO lines; `style`/`po_no` surface on the card header; other columns (`buyer`, `po_date`, `crd`, `season`, `country`) exist in the sheet but are unused |
+| `so_inf` | `ord_no`, `ord_id`, `style`, `po_no`, `season`, `country` | PO lines; `style`/`po_no`/`season`/`country` surface on the card header (`country` takes precedence over the `change_so`-derived value); other columns (`buyer`, `po_date`, `crd`) exist in the sheet but are unused |
 
 There is **no** order-header table and **no** sync-log table in the standalone
 database. Order headers are derived at query time (below).
@@ -86,8 +86,9 @@ Flow in `so-monitor-service.js` → `loadOrders(pool, window)`:
 5. `buildHeaders` derives the order header per `ord_no`:
    - `soNo` = `ord_no`; `ordId` = first recorded `ord_id`
    - `poDate` decoded from the SO number tail `SO<brand><YYMMDD><seq>`
-   - `crd` = latest `new_crd` value; `country` = latest `new_country`
-     (fallback: earliest `old_country`)
+   - `crd` = latest `new_crd` value
+   - `country` = first `so_inf.country` line value, else latest `new_country`
+     (fallback: earliest `old_country`); `season` = first `so_inf.season` line value
    - `stage` = highest stage in `stage`; `styles`/`poNos` = distinct values from
      matching `so_inf` lines
 
