@@ -40,7 +40,7 @@ standalone/
         ├── api.ts                 # fetch wrapper: GET /api/so-monitor/dashboard
         ├── types.ts               # response contract (local copy)
         ├── hooks/useSoMonitorData.ts  # the ONLY place that triggers DB queries
-        ├── components/            # Toolbar, Kpi, OrderCard, Pager, TweaksPanel, icons
+        ├── components/            # Toolbar, Kpi, OrderCard, Pager, icons
         ├── lib/i18n.ts            # all zh/en copy; localStorage key `so-lang`
         ├── lib/timeline.ts        # stage windows, KPI stats, date helpers
         └── so-monitor.css         # all styling; design tokens are CSS variables
@@ -126,16 +126,17 @@ The toolbar + summary + detail heading live in `.sticky-top`
 applied by setting `data-stuck` **directly on the DOM node**.
 Never reintroduce `setState` inside a scroll/resize handler here — the previous
 scroll-listener version re-rendered the whole page on every frame and caused
-visible jank. The `[data-stuck="true"]` CSS only condenses paddings/font sizes;
-keep those rules visual-only (no layout height that could flap the observer).
+visible jank. The `[data-stuck="true"]` CSS is **visual-only** (background +
+shadow): it must never change the block's height — a height change shifts the
+document height, clamps the scroll position and flaps the observer at the top
+of a short (KPI-filtered) page. No `backdrop-filter` on the stuck header
+either (it re-blurs the scrolling content every frame).
 
 ### Other client facts
 
 - Language: zh/en via `buildCopy(lang)` in `lib/i18n.ts`; persisted in
   localStorage `so-lang`; default zh. All UI text lives in `i18n.ts` — never
   hardcode strings in components.
-- Display tweaks (density/radius/canvas/motion) are CSS class variants from
-  `TweaksPanel`, persisted in `so-tweaks-*` keys.
 - Pagination is client-side, `PAGE_SIZE` in `lib/timeline.ts`.
 - Dates display as `YYYY-MM-DD`; in-card dates always use the full form.
 

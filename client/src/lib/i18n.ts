@@ -54,21 +54,6 @@ export interface SoCopyBase {
   emptyTitle: string;
   emptyBody: string;
   showAllDates: string;
-  tweakTitle: string;
-  tweakDisplay: string;
-  tweakDensity: string;
-  densityComfy: string;
-  densityCompact: string;
-  tweakRadius: string;
-  radiusSoft: string;
-  radiusRound: string;
-  radiusCrisp: string;
-  tweakCanvas: string;
-  canvasLight: string;
-  canvasSage: string;
-  canvasMist: string;
-  tweakMotionSection: string;
-  tweakMotion: string;
   loading: string;
   loadError: string;
   retry: string;
@@ -129,23 +114,8 @@ const COPY: Record<SoLang, SoCopyBase> = {
     changedAt: '变更时间',
     close: '关闭',
     emptyTitle: '没有符合条件的订单',
-    emptyBody: '当前月份没有变更记录。可查看全部变更日期，或调整关键词、国家与变更类型。',
+    emptyBody: '当前月份没有变更记录。可查看全部变更日期，或调整关键词、买家与变更类型。',
     showAllDates: '查看全部变更日期',
-    tweakTitle: '显示设置',
-    tweakDisplay: '显示',
-    tweakDensity: '密度',
-    densityComfy: '宽松',
-    densityCompact: '紧凑',
-    tweakRadius: '圆角',
-    radiusSoft: '柔和',
-    radiusRound: '圆润',
-    radiusCrisp: '直角',
-    tweakCanvas: '页面背景',
-    canvasLight: '亮白',
-    canvasSage: '淡绿',
-    canvasMist: '冷灰',
-    tweakMotionSection: '动效',
-    tweakMotion: '闪烁与过渡',
     loading: '正在加载变更数据…',
     loadError: '变更数据加载失败',
     retry: '重试',
@@ -185,23 +155,8 @@ const COPY: Record<SoLang, SoCopyBase> = {
     changedAt: 'changed at',
     close: 'Close',
     emptyTitle: 'No matching orders',
-    emptyBody: 'There are no change records in this window. Show all change dates, or adjust the keyword, country and change type.',
+    emptyBody: 'There are no change records in this window. Show all change dates, or adjust the keyword, buyer and change type.',
     showAllDates: 'Show all change dates',
-    tweakTitle: 'Display',
-    tweakDisplay: 'Display',
-    tweakDensity: 'Density',
-    densityComfy: 'Comfy',
-    densityCompact: 'Compact',
-    tweakRadius: 'Corner radius',
-    radiusSoft: 'Soft',
-    radiusRound: 'Round',
-    radiusCrisp: 'Crisp',
-    tweakCanvas: 'Background',
-    canvasLight: 'Light',
-    canvasSage: 'Sage',
-    canvasMist: 'Mist',
-    tweakMotionSection: 'Motion',
-    tweakMotion: 'Pulse & transitions',
     loading: 'Loading change data…',
     loadError: 'Could not load change data',
     retry: 'Retry',
@@ -241,23 +196,8 @@ const COPY: Record<SoLang, SoCopyBase> = {
     changedAt: 'thay đổi lúc',
     close: 'Đóng',
     emptyTitle: 'Không có đơn hàng phù hợp',
-    emptyBody: 'Không có bản ghi thay đổi trong khoảng thời gian này. Hãy xem tất cả các ngày thay đổi, hoặc điều chỉnh từ khóa, quốc gia và loại thay đổi.',
+    emptyBody: 'Không có bản ghi thay đổi trong khoảng thời gian này. Hãy xem tất cả các ngày thay đổi, hoặc điều chỉnh từ khóa, người mua và loại thay đổi.',
     showAllDates: 'Xem tất cả các ngày thay đổi',
-    tweakTitle: 'Tùy chỉnh hiển thị',
-    tweakDisplay: 'Hiển thị',
-    tweakDensity: 'Mật độ',
-    densityComfy: 'Thoải mái',
-    densityCompact: 'Gọn',
-    tweakRadius: 'Bo góc',
-    radiusSoft: 'Mềm',
-    radiusRound: 'Tròn',
-    radiusCrisp: 'Vuông',
-    tweakCanvas: 'Nền trang',
-    canvasLight: 'Trắng sáng',
-    canvasSage: 'Xanh nhạt',
-    canvasMist: 'Xám lạnh',
-    tweakMotionSection: 'Hiệu ứng',
-    tweakMotion: 'Nhấp nháy & chuyển động',
     loading: 'Đang tải dữ liệu thay đổi…',
     loadError: 'Không tải được dữ liệu thay đổi',
     retry: 'Thử lại',

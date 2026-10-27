@@ -1666,12 +1666,6 @@
 
 /* ---------------- motion prefs ---------------- */
 
-.app.no-motion .so-card { animation: none; }
-.app.no-motion .node.active::before { animation: none; opacity: 0; }
-.app.no-motion .stage-pill i { animation: none; }
-.app.no-motion .sync-chip-dot { animation: none; }
-.app.no-motion .sync-chip-btn .is-spinning { animation: none; }
-
 @media (prefers-reduced-motion: reduce) {
   .so-card, .node.active::before, .stage-pill i { animation: none !important; }
 }

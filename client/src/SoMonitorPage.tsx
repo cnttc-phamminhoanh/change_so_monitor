@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { SoChange, SoOrder } from './types';
 
@@ -7,20 +7,6 @@ import OrderCard from './components/OrderCard';
 import Pager from './components/Pager';
 import Toolbar from './components/Toolbar';
 import { CloseIcon } from './components/icons';
-import {
-  TweaksPanel,
-  TweakRadio,
-  TweakSection,
-  TweakToggle,
-} from './components/TweaksPanel';
-import {
-  TWEAK_DEFAULTS,
-  readStoredTweaksOpen,
-  useTweaks,
-  type SoCanvas,
-  type SoDensity,
-  type SoRadius,
-} from './lib/tweaks';
 import { useSoMonitorData } from './hooks/useSoMonitorData';
 import { buildCopy, type SoLang } from './lib/i18n';
 import {
@@ -51,7 +37,6 @@ const readInitialLang = (): SoLang => {
 };
 
 const SoMonitorPage: React.FC = () => {
-  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [lang, setLang] = useState<SoLang>(readInitialLang);
   const [query, setQuery] = useState('');
   const [buyer, setBuyer] = useState('all');
@@ -64,7 +49,6 @@ const SoMonitorPage: React.FC = () => {
   const [fromDraft, setFromDraft] = useState(RANGE_START);
   const [toDraft, setToDraft] = useState(RANGE_END);
   const [fieldFilter, setFieldFilter] = useState<ReportField | null>(null);
-  const [tweaksOpen, setTweaksOpen] = useState<boolean>(readStoredTweaksOpen);
 
   const listRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -83,14 +67,6 @@ const SoMonitorPage: React.FC = () => {
       /* storage may be unavailable */
     }
   }, [lang]);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('so-tweaks-open', tweaksOpen ? '1' : '0');
-    } catch {
-      /* storage may be unavailable */
-    }
-  }, [tweaksOpen]);
 
   useEffect(() => {
     const node = stickyRef.current;
@@ -216,7 +192,7 @@ const SoMonitorPage: React.FC = () => {
     if (!el) return;
     const pinned = stickyRef.current ? stickyRef.current.getBoundingClientRect().height : 80;
     const top = el.getBoundingClientRect().top + window.scrollY - (pinned + 18);
-    window.scrollTo({ top: Math.max(top, 0), behavior: tweaks.motion ? 'smooth' : 'auto' });
+    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
   };
 
   const resetFilters = (): void => {
@@ -239,18 +215,7 @@ const SoMonitorPage: React.FC = () => {
     setToDate('');
   };
 
-  const closeTweaks = useCallback(() => setTweaksOpen(false), []);
-  const openTweaks = useCallback(() => setTweaksOpen(true), []);
-
-  const rootClass = [
-    'app',
-    `canvas-${tweaks.canvas}`,
-    `radius-${tweaks.radius}`,
-    `density-${tweaks.density}`,
-    tweaks.motion ? '' : 'no-motion',
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const rootClass = ['app', 'canvas-light', 'radius-soft', 'density-comfy'].join(' ');
 
   const hasError = error !== null;
   const showLoading = loading && orders === undefined;
@@ -398,51 +363,6 @@ const SoMonitorPage: React.FC = () => {
           </div>
         ) : null}
       </div>
-
-      <TweaksPanel
-        title={copy.tweakTitle}
-        toggleLabel={copy.tweakTitle}
-        open={tweaksOpen}
-        onOpen={openTweaks}
-        onClose={closeTweaks}
-      >
-        <TweakSection label={copy.tweakDisplay} />
-        <TweakRadio
-          label={copy.tweakDensity}
-          value={tweaks.density}
-          options={[
-            { value: 'comfy', label: copy.densityComfy },
-            { value: 'compact', label: copy.densityCompact },
-          ]}
-          onChange={(value: SoDensity) => setTweak({ density: value })}
-        />
-        <TweakRadio
-          label={copy.tweakRadius}
-          value={tweaks.radius}
-          options={[
-            { value: 'soft', label: copy.radiusSoft },
-            { value: 'round', label: copy.radiusRound },
-            { value: 'crisp', label: copy.radiusCrisp },
-          ]}
-          onChange={(value: SoRadius) => setTweak({ radius: value })}
-        />
-        <TweakRadio
-          label={copy.tweakCanvas}
-          value={tweaks.canvas}
-          options={[
-            { value: 'light', label: copy.canvasLight },
-            { value: 'sage', label: copy.canvasSage },
-            { value: 'mist', label: copy.canvasMist },
-          ]}
-          onChange={(value: SoCanvas) => setTweak({ canvas: value })}
-        />
-        <TweakSection label={copy.tweakMotionSection} />
-        <TweakToggle
-          label={copy.tweakMotion}
-          value={tweaks.motion}
-          onChange={(value: boolean) => setTweak({ motion: value })}
-        />
-      </TweaksPanel>
     </div>
   );
 };
