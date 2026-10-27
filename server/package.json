@@ -1,0 +1,21 @@
+{
+  "name": "so-monitor-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Node.js (plain JavaScript) backend for the Germton SO change monitor, backed by SQL Server",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "mssql": "^11.0.1"
+  }
+}
