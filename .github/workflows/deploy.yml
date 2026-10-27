@@ -70,6 +70,14 @@ jobs:
 
       - name: Verify app is up
         run: |
-          code="$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:2402/)"
-          echo "HTTP status: $code"
-          test "$code" = "200" || { echo "App not healthy (expected 200)"; exit 1; }
+          for i in $(seq 1 30); do
+            code="$(curl -s --max-time 5 --noproxy '*' -o /dev/null -w '%{http_code}' "http://127.0.0.1:2402/" || true)"
+            if [ "$code" = "200" ]; then
+              echo "App healthy: HTTP 200 (attempt ${i})"
+              exit 0
+            fi
+            echo "Attempt ${i}: HTTP ${code:-refused}, waiting..."
+            sleep 2
+          done
+          echo "App not healthy: last HTTP code ${code:-refused}"
+          exit 1
