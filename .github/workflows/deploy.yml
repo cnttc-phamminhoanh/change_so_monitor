@@ -58,8 +58,15 @@ jobs:
         working-directory: ${{ env.DEPLOY_DIR }}/server
         run: npm ci
 
-      - name: Restart app with pm2
-        run: pm2 restart "$PM2_APP"
+      - name: Start or restart app with pm2
+        working-directory: ${{ env.DEPLOY_DIR }}
+        run: |
+          if pm2 describe "$PM2_APP" > /dev/null 2>&1; then
+            pm2 restart "$PM2_APP"
+          else
+            pm2 start ecosystem.config.js
+            pm2 save
+          fi
 
       - name: Verify app is up
         run: |
