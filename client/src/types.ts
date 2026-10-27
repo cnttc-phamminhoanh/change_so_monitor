@@ -25,6 +25,7 @@ export interface SoOrder {
   poDate: string | null;
   crd: string | null;
   country: string | null;
+  buyer: string | null;
   season: string | null;
   styles: string[];
   poNos: string[];

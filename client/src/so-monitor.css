@@ -265,7 +265,14 @@
   transition: opacity .2s ease;
 }
 
-/* filters + change summary stay pinned while the list scrolls */
+/* filters + change summary stay pinned while the list scrolls.
+   The pinned state is VISUAL ONLY (background + shadow). It must never change
+   the block's height: a height change alters the document height, which clamps
+   the scroll position and flips stuck/unstuck at the top of a short page — that
+   oscillation reads as scroll jank (e.g. after clicking a KPI tile the list
+   shrinks to a few cards and scrolling becomes jumpy). No backdrop-filter
+   either: re-blurring the content that scrolls beneath it costs a repaint
+   every frame. */
 .sticky-top {
   position: sticky;
   top: 0;
@@ -279,26 +286,11 @@
 }
 
 .sticky-top[data-stuck="true"] {
-  background: rgba(241, 244, 240, 0.95);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
-  backdrop-filter: saturate(140%) blur(10px);
+  background: var(--bg);
   box-shadow: 0 18px 26px -24px rgba(20, 32, 28, 0.55);
 }
 
-/* condensed tiles once the block is pinned, so the list keeps room */
-.sticky-top[data-stuck="true"] .toolbar { padding: 8px; }
-.sticky-top[data-stuck="true"] .section-head { margin: 12px 0 9px; }
-.sticky-top[data-stuck="true"] .detail-head { margin: 13px 0 8px; }
-
 .section-head.detail-head { margin: 26px 0 12px; }
-.sticky-top[data-stuck="true"] .section-note { display: none; }
-.sticky-top[data-stuck="true"] .kpi-grid { gap: 10px; }
-.sticky-top[data-stuck="true"] .kpi { min-height: 0; padding: 10px 13px 11px; }
-.sticky-top[data-stuck="true"] .kpi-label { font-size: 11px; gap: 4px; }
-.sticky-top[data-stuck="true"] .kpi-icon { display: none; }
-.sticky-top[data-stuck="true"] .kpi-num { font-size: 23px; margin: 5px 0 0; }
-.sticky-top[data-stuck="true"] .search-btn { height: 32px; padding: 0 12px; font-size: 11px; border-radius: 10px; }
-.sticky-top[data-stuck="true"] .date-inputs input[type="date"] { height: 32px; width: 106px; border-radius: 10px; }
 .toolbar {
   background: var(--surface);
   border: 1px solid var(--line);

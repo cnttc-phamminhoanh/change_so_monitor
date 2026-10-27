@@ -72,7 +72,7 @@ export interface SoCopyBase {
   loading: string;
   loadError: string;
   retry: string;
-  countryFilter: string;
+  buyerFilter: string;
   soNoMeta: string;
 }
 
@@ -149,7 +149,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     loading: '正在加载变更数据…',
     loadError: '变更数据加载失败',
     retry: '重试',
-    countryFilter: '国家',
+    buyerFilter: '买家',
     soNoMeta: '订单号',
   },
   en: {
@@ -205,7 +205,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     loading: 'Loading change data…',
     loadError: 'Could not load change data',
     retry: 'Retry',
-    countryFilter: 'Country',
+    buyerFilter: 'Buyer',
     soNoMeta: 'SO no',
   },
   vi: {
@@ -261,7 +261,7 @@ const COPY: Record<SoLang, SoCopyBase> = {
     loading: 'Đang tải dữ liệu thay đổi…',
     loadError: 'Không tải được dữ liệu thay đổi',
     retry: 'Thử lại',
-    countryFilter: 'Quốc gia',
+    buyerFilter: 'Người mua',
     soNoMeta: 'Số SO',
   },
 };

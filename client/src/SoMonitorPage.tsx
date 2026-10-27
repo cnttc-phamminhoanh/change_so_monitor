@@ -54,7 +54,7 @@ const SoMonitorPage: React.FC = () => {
   const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [lang, setLang] = useState<SoLang>(readInitialLang);
   const [query, setQuery] = useState('');
-  const [country, setCountry] = useState('all');
+  const [buyer, setBuyer] = useState('all');
   const [page, setPage] = useState(1);
   /* Committed range: what the database was last queried with. Only changes
      via the Search button, reset or show-all-dates — never while typing. */
@@ -115,12 +115,12 @@ const SoMonitorPage: React.FC = () => {
 
   const allOrders = useMemo<SoOrder[]>(() => orders ?? [], [orders]);
 
-  const countries = useMemo(
+  const buyers = useMemo(
     () =>
       Array.from(
         new Set(
           allOrders
-            .map((order: SoOrder) => order.country)
+            .map((order: SoOrder) => order.buyer)
             .filter((value: string | null): value is string => Boolean(value)),
         ),
       ).sort((a: string, b: string) => a.localeCompare(b)),
@@ -139,18 +139,18 @@ const SoMonitorPage: React.FC = () => {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return allOrders.filter((order: SoOrder) => {
-      const matchesCountry = country === 'all' || order.country === country;
+      const matchesBuyer = buyer === 'all' || order.buyer === buyer;
       const matchesQuery =
         !q ||
         order.soNo.toLowerCase().includes(q) ||
-        (order.country ?? '').toLowerCase().includes(q) ||
+        (order.buyer ?? '').toLowerCase().includes(q) ||
         (order.crd ?? '').includes(q);
       const matchesDate = order.changes.some(
         (change: SoChange) => change.at >= range.lo && change.at <= range.hi,
       );
-      return matchesCountry && matchesQuery && matchesDate;
+      return matchesBuyer && matchesQuery && matchesDate;
     });
-  }, [allOrders, query, country, range]);
+  }, [allOrders, query, buyer, range]);
 
   const listed = useMemo(() => {
     if (!fieldFilter) return visible;
@@ -183,7 +183,7 @@ const SoMonitorPage: React.FC = () => {
   );
 
   const dateFiltered = windowed && (fromDate !== RANGE_START || toDate !== RANGE_END);
-  const filtersActive = query.trim() !== '' || country !== 'all' || dateFiltered || Boolean(fieldFilter);
+  const filtersActive = query.trim() !== '' || buyer !== 'all' || dateFiltered || Boolean(fieldFilter);
 
   const pageCount = Math.max(1, Math.ceil(listed.length / PAGE_SIZE));
   const current = Math.min(page, pageCount);
@@ -191,7 +191,7 @@ const SoMonitorPage: React.FC = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [query, country, fieldFilter, range.lo, range.hi]);
+  }, [query, buyer, fieldFilter, range.lo, range.hi]);
 
   /* The only place where typing becomes a database query: normalize the draft
      inputs and commit them. Identical ranges are not re-queried. */
@@ -221,7 +221,7 @@ const SoMonitorPage: React.FC = () => {
 
   const resetFilters = (): void => {
     setQuery('');
-    setCountry('all');
+    setBuyer('all');
     setFromDraft(RANGE_START);
     setToDraft(RANGE_END);
     setFromDate(RANGE_START);
@@ -231,7 +231,7 @@ const SoMonitorPage: React.FC = () => {
 
   const showAllDates = (): void => {
     setQuery('');
-    setCountry('all');
+    setBuyer('all');
     setFieldFilter(null);
     setFromDraft('');
     setToDraft('');
@@ -281,15 +281,15 @@ const SoMonitorPage: React.FC = () => {
         <div className="sticky-top" ref={stickyRef}>
           <Toolbar
             query={query}
-            country={country}
-            countries={countries}
+            buyer={buyer}
+            buyers={buyers}
             fromDate={fromDraft}
             toDate={toDraft}
             dateFiltered={dateFiltered}
             filtersActive={filtersActive}
             copy={copy}
             onQueryChange={setQuery}
-            onCountryChange={setCountry}
+            onBuyerChange={setBuyer}
             onFromChange={setFromDraft}
             onToChange={setToDraft}
             onSearch={applySearch}

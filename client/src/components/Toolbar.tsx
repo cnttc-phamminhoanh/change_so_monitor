@@ -5,15 +5,15 @@ import { ChevronIcon, SearchIcon } from './icons';
 
 export interface ToolbarProps {
   query: string;
-  country: string;
-  countries: string[];
+  buyer: string;
+  buyers: string[];
   fromDate: string;
   toDate: string;
   dateFiltered: boolean;
   filtersActive: boolean;
   copy: SoCopy;
   onQueryChange: (value: string) => void;
-  onCountryChange: (value: string) => void;
+  onBuyerChange: (value: string) => void;
   onFromChange: (value: string) => void;
   onToChange: (value: string) => void;
   onSearch: () => void;
@@ -22,15 +22,15 @@ export interface ToolbarProps {
 
 const Toolbar: React.FC<ToolbarProps> = ({
   query,
-  country,
-  countries,
+  buyer,
+  buyers,
   fromDate,
   toDate,
   dateFiltered,
   filtersActive,
   copy,
   onQueryChange,
-  onCountryChange,
+  onBuyerChange,
   onFromChange,
   onToChange,
   onSearch,
@@ -73,14 +73,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
       </div>
 
       <div className="select-wrap">
-        <span>{copy.countryFilter}</span>
+        <span>{copy.buyerFilter}</span>
         <select
-          value={country}
-          onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onCountryChange(event.target.value)}
-          aria-label={copy.countryFilter}
+          value={buyer}
+          onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onBuyerChange(event.target.value)}
+          aria-label={copy.buyerFilter}
         >
           <option value="all">{copy.all}</option>
-          {countries.map((name: string) => (
+          {buyers.map((name: string) => (
             <option key={name} value={name}>
               {name}
             </option>

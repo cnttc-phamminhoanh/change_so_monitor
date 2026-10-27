@@ -206,6 +206,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, index, activeField, copy }
 
         <div className="so-meta">
           <div className="meta">
+            <span className="meta-k">{copy.buyer}</span>
+            <span className="meta-v">{order.buyer ?? '—'}</span>
+          </div>
+          <div className="meta">
             <span className="meta-k">{copy.styleMeta}</span>
             <span className="meta-v mono">{(order.styles ?? []).length ? (order.styles ?? []).join(', ') : '—'}</span>
           </div>
