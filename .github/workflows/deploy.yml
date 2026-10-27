@@ -1,0 +1,68 @@
+# Deploy SO change monitor lên máy chủ Linux bằng GitHub Actions self-hosted runner.
+#
+# Runner:   /home/it/actions-runner-change_so_monitor
+# Đích:     /home/it/change_so_monitor
+# Process:  pm2 (tên: so-monitor) — cấu hình trong ecosystem.config.js
+#
+# Kích hoạt: push lên nhánh master, hoặc bấm "Run workflow" thủ công trên GitHub.
+#
+# Lưu ý an toàn: runner tự-host sẽ chạy code lấy từ repo — chỉ dùng với repo
+# đáng tin cậy (không chạy workflow từ PR của người không quen biết).
+# Bước sync dùng rsync (đã xác nhận có trên server) và cố ý KHÔNG dùng
+# --delete để không xoá nhầm .env, node_modules và logs trên máy chủ.
+
+name: Deploy SO Monitor
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-so-monitor
+  cancel-in-progress: false
+
+env:
+  DEPLOY_DIR: /home/it/change_so_monitor
+  PM2_APP: so-monitor
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux]
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Install client dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Build client
+        working-directory: client
+        run: npm run build
+
+      - name: Sync source to deploy directory
+        run: |
+          rsync -a \
+            --exclude 'node_modules/' \
+            --exclude '.git/' \
+            --exclude '.env' \
+            --exclude 'logs/' \
+            "$GITHUB_WORKSPACE/" "$DEPLOY_DIR/"
+
+      - name: Install server dependencies
+        working-directory: ${{ env.DEPLOY_DIR }}/server
+        run: npm ci
+
+      - name: Restart app with pm2
+        run: pm2 restart "$PM2_APP"
+
+      - name: Verify app is up
+        run: |
+          code="$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:2402/)"
+          echo "HTTP status: $code"
+          test "$code" = "200" || { echo "App not healthy (expected 200)"; exit 1; }
